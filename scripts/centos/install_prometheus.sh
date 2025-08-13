@@ -4,7 +4,7 @@ PROM_VERSION=${PROM_VERSION:-2.53.0}
 cd /tmp
 curl -fLO https://github.com/prometheus/prometheus/releases/download/v${PROM_VERSION}/prometheus-${PROM_VERSION}.linux-amd64.tar.gz
 tar xzf prometheus-${PROM_VERSION}.linux-amd64.tar.gz
-sudo useradd --no-create-home --shell /usr/sbin/nologin prometheus || true
+sudo useradd --no-create-home --shell /sbin/nologin prometheus || true
 sudo mkdir -p /etc/prometheus /var/lib/prometheus
 cd prometheus-${PROM_VERSION}.linux-amd64
 sudo cp prometheus promtool /usr/local/bin/
@@ -26,4 +26,4 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-echo "Prometheus installed. Place configs in /etc/prometheus then: sudo systemctl daemon-reload && sudo systemctl enable --now prometheus"
+echo "Prometheus installed. Copy configs then: systemctl daemon-reload && systemctl enable --now prometheus"

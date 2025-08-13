@@ -9,16 +9,16 @@
       "title": "NN Heap Used (%)",
       "targets": [
         {
-          "expr": "(jvm_memory_heap_used_bytes{instance=~\"nn1:7000\"} / jvm_memory_heap_max_bytes{instance=~\"nn1:7000\"}) * 100"
+          "expr": "(jvm_memory_heap_used_bytes{instance=\"nn1:7000\"} / jvm_memory_heap_max_bytes{instance=\"nn1:7000\"}) * 100"
         }
       ]
     },
     {
       "type": "graph",
-      "title": "DN1/2 JVM Threads",
+      "title": "DN JVM Threads",
       "targets": [
         {
-          "expr": "jvm_threads{instance=~\"dn(1|2):7001|dn(1|2):7003\"}"
+          "expr": "jvm_threads{instance=~\"dn[12]:(7001|7003)\"}"
         }
       ]
     },
@@ -33,6 +33,6 @@
     }
   ],
   "schemaVersion": 36,
-  "title": "Hadoop Admin \u2014 Core Metrics",
+  "title": "HDP 2.6.5 \u2014 Hadoop Admin Core",
   "version": 1
 }

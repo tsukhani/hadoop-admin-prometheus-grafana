@@ -2,8 +2,7 @@ route:
   receiver: default
   group_by: ['alertname']
   routes:
-    - matchers:
-        - severity="critical"
+    - matchers: [ severity="critical" ]
       receiver: ops
 
 receivers:

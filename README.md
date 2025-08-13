@@ -1,12 +1,17 @@
-# Hadoop Administration Project — Monitoring with Prometheus & Grafana
+# Hadoop Administration Project — HDP 2.6.5 on CentOS with Prometheus & Grafana
+
+This edition targets **Hortonworks Data Platform (HDP) 2.6.5** on **CentOS 7** (or compatible RHEL). 
+It assumes **Ambari** manages Hadoop services (HDFS, YARN, Hive, etc.), and focuses on 
+setting up a **Prometheus + Alertmanager + Grafana** monitoring stack with **Node Exporter** and **JMX Exporter**.
+
+> HDP 2.6.5 typically uses **Java 8** and Hadoop 2.7.x. Service UIs: NameNode 50070, ResourceManager 8088.
 
 ## What you'll do
-- Install **Apache Hadoop** (open-source binaries) on a 3-node lab.
-- Expose metrics using **Node Exporter** (system) and **JMX Exporter** (Hadoop JVMs).
-- Install **Prometheus**, **Alertmanager**, and **Grafana** on a monitor node.
-- Configure Prometheus scrape jobs and alert rules.
-- Build/Import Grafana dashboards and set up notifications (Slack/email).
-- (Optional) Ship logs to **Loki** and visualize in Grafana Explore.
+- Verify/bring up HDFS + YARN using **Ambari**.
+- Install **Node Exporter** + **JMX Exporter** across HDP hosts (nn1, dn1, dn2).
+- Install **Prometheus**, **Alertmanager**, **Grafana** on a **monitor** node (CentOS).
+- Configure Prometheus scrape jobs and alert rules; wire **email/Slack** notifications.
+- Import a starter **Grafana dashboard** and build a few custom panels.
 
 ## Topology
 - nn1: NameNode + ResourceManager (+ node_exporter + jmx_exporter)
@@ -14,18 +19,26 @@
 - dn2: DataNode + NodeManager (+ node_exporter + jmx_exporter)
 - monitor: Prometheus + Alertmanager + Grafana
 
-## Day-by-day
-- **Day 1**: Hadoop install & bring-up (HDFS/YARN), web UIs, fsck/report.
-- **Day 2**: Exporters + Prometheus + Grafana.
-- **Day 3**: Dashboards + alerts, notification test fire.
-- **Day 4**: Hardening, quotas/snapshots, final report.
-
-## Quickstart
-1) On all Hadoop nodes, install Java 11, create user `hadoop`, enable passwordless SSH.
-2) Run `scripts/install_hadoop.sh` and copy `configs/*.xml` into `$HADOOP_HOME/etc/hadoop`.
-3) Start HDFS+YARN and validate: NameNode UI 9870, RM UI 8088.
-4) On each Hadoop node, install exporters: `scripts/install_node_exporter.sh` and add JMX exporter jar/agent using `jmx/` templates.
-5) On **monitor**: run `scripts/install_prometheus.sh`, `scripts/install_grafana.sh`, `scripts/install_alertmanager.sh`.
-6) Put `monitoring/prometheus.yml` & `monitoring/alerts.yml` in `/etc/prometheus/`. Start services.
-7) In Grafana, add Prometheus data source (http://monitor:9090) and import dashboards from `grafana_dashboards/`.
-8) Configure Alertmanager receivers in `monitoring/alertmanager.yml` and test alerts.
+## Quickstart (HDP/CentOS)
+1) Confirm HDP services are healthy in **Ambari** (HDFS/YARN green). Java 1.8 is recommended.
+2) On **each Hadoop host** (nn1/dn1/dn2), install exporters:
+   ```bash
+   sudo bash scripts/centos/install_node_exporter.sh
+   sudo bash scripts/centos/prepare_jmx_exporter.sh
+   # Edit /usr/hdp/current/*-env.sh via Ambari config to add -javaagent flags, then restart services.
+   ```
+3) On **monitor** host, install the monitoring stack:
+   ```bash
+   sudo bash scripts/centos/install_prometheus.sh
+   sudo bash scripts/centos/install_alertmanager.sh
+   sudo bash scripts/centos/install_grafana.sh
+   ```
+4) Copy configs and start services:
+   ```bash
+   sudo cp monitoring/prometheus.yml /etc/prometheus/prometheus.yml
+   sudo cp monitoring/alerts.yml /etc/prometheus/alerts.yml
+   sudo cp monitoring/alertmanager.yml /etc/alertmanager/alertmanager.yml
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now prometheus alertmanager grafana-server
+   ```
+5) In Grafana (http://monitor:3000), add Prometheus datasource (http://monitor:9090) and import `grafana_dashboards/hdp265_hadoop_admin_core.json`.

@@ -1,6 +1,7 @@
-# Grading Rubric
-- Hadoop install & multi-node bring-up (25)
-- Exporters installed + scraping in Prometheus (25)
-- Grafana dashboard(s) with meaningful Hadoop & system metrics (20)
-- Alert rules + functional notifications via Alertmanager (20)
-- Documentation/screenshots/report (10)
+# Grading Rubric — HDP 2.6.5 (CentOS)
+
+- HDP services healthy in Ambari; NN/RM UIs reachable (20)
+- Node & JMX exporters installed and scraping (25)
+- Prometheus + Grafana operational; dashboard imported (25)
+- Alert rules + working notifications (email/Slack) (20)
+- Short report with screenshots/logs (10)

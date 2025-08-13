@@ -1,5 +1,5 @@
 groups:
-- name: hadoop_admin_alerts
+- name: hdp265_hadoop_admin_alerts
   rules:
   - alert: InstanceDown
     expr: up == 0
@@ -10,7 +10,7 @@ groups:
       description: "Prometheus target is not responding"
 
   - alert: NamenodeHighHeap
-    expr: jvm_memory_heap_used_bytes{job="hadoop-jmx", instance=~".*:7000"} / jvm_memory_heap_max_bytes{job="hadoop-jmx", instance=~".*:7000"} > 0.85
+    expr: jvm_memory_heap_used_bytes{instance=~".*:7000"} / jvm_memory_heap_max_bytes{instance=~".*:7000"} > 0.85
     for: 5m
     labels: { severity: warning }
     annotations:

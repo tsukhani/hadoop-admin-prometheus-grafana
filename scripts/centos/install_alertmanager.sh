@@ -4,7 +4,7 @@ ALERTMAN_VERSION=${ALERTMAN_VERSION:-0.27.0}
 cd /tmp
 curl -fLO https://github.com/prometheus/alertmanager/releases/download/v${ALERTMAN_VERSION}/alertmanager-${ALERTMAN_VERSION}.linux-amd64.tar.gz
 tar xzf alertmanager-${ALERTMAN_VERSION}.linux-amd64.tar.gz
-sudo useradd --no-create-home --shell /usr/sbin/nologin alertmanager || true
+sudo useradd --no-create-home --shell /sbin/nologin alertmanager || true
 sudo mkdir -p /etc/alertmanager /var/lib/alertmanager
 cd alertmanager-${ALERTMAN_VERSION}.linux-amd64
 sudo cp alertmanager amtool /usr/local/bin/
@@ -25,4 +25,4 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target
 EOF
-echo "Alertmanager installed. Create /etc/alertmanager/alertmanager.yml then: sudo systemctl daemon-reload && sudo systemctl enable --now alertmanager"
+echo "Alertmanager installed. Create /etc/alertmanager/alertmanager.yml then: systemctl daemon-reload && systemctl enable --now alertmanager"

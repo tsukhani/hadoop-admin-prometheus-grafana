@@ -1,15 +1,15 @@
-## Hadoop bring-up
-hdfs namenode -format
-start-dfs.sh && start-yarn.sh
-hdfs dfs -mkdir -p /data && hdfs dfsadmin -report
+## Ambari (service restarts after env changes)
+# Use Ambari UI to Save configs & Restart affected components
 
-## Service checks
-systemctl status prometheus alertmanager grafana-server node_exporter
-
-## Prometheus test
-curl -s http://monitor:9090/-/ready
-curl -s http://nn1:9100/metrics | head
+## Verify exporters
+systemctl status node_exporter
 curl -s http://nn1:7000/metrics | head
+curl -s http://dn1:9100/metrics | head
 
-## Alert test (heap rule): temporarily lower threshold in alerts.yml and reload
+## Prometheus/Grafana/Alertmanager
+systemctl status prometheus alertmanager grafana-server
+curl -s http://monitor:9090/-/ready
+curl -s http://monitor:9093/api/v2/status
+
+## Alert test
 curl -X POST http://monitor:9090/-/reload
