@@ -1,2 +1,5 @@
 lowercaseOutputName: true
-rules: []
+rules:
+  - pattern: 'Hadoop<name=(.*), service=(.*)><>(\w+)'
+    name: hadoop_$2_$3
+    type: GAUGE

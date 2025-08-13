@@ -1,1 +1,17 @@
-global: { scrape_interval: '15s' }
+global:
+  scrape_interval: 15s
+rule_files:
+  - C:\Prometheus\alerts.yml
+alerting:
+  alertmanagers:
+    - static_configs: [{ targets: ['localhost:9093'] }]
+
+scrape_configs:
+  - job_name: windows
+    static_configs:
+      - targets: ['localhost:9182']
+
+  - job_name: hadoop-jmx
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['localhost:7000','localhost:7001','localhost:7002','localhost:7003']

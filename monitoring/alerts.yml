@@ -1,1 +1,26 @@
-groups: []
+groups:
+- name: hadoop_windows
+  rules:
+  - alert: InstanceDown
+    expr: up == 0
+    for: 2m
+    labels: { severity: critical }
+    annotations:
+      summary: "Target down"
+      description: "The target {{ $labels.instance }} is not responding"
+
+  - alert: NNHighHeap
+    expr: jvm_memory_heap_used_bytes{instance="localhost:7000"} / jvm_memory_heap_max_bytes{instance="localhost:7000"} > 0.85
+    for: 5m
+    labels: { severity: warning }
+    annotations:
+      summary: "NameNode heap > 85%"
+      description: "Investigate GC, config, or workload."
+
+  - alert: RootDisk90
+    expr: (windows_logical_disk_size_bytes{volume="C:"} - windows_logical_disk_free_bytes{volume="C:"}) / windows_logical_disk_size_bytes{volume="C:"} > 0.9
+    for: 10m
+    labels: { severity: warning }
+    annotations:
+      summary: "C: drive > 90%"
+      description: "Disk usage high on Windows host."

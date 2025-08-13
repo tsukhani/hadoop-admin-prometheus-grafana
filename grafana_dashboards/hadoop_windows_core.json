@@ -1,1 +1,38 @@
-{}
+{
+  "annotations": {
+    "list": []
+  },
+  "editable": true,
+  "panels": [
+    {
+      "type": "graph",
+      "title": "NN Heap Used (%)",
+      "targets": [
+        {
+          "expr": "(jvm_memory_heap_used_bytes{instance=\"localhost:7000\"} / jvm_memory_heap_max_bytes{instance=\"localhost:7000\"}) * 100"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "DN JVM Threads",
+      "targets": [
+        {
+          "expr": "jvm_threads{instance=\"localhost:7001\"}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Windows CPU (%)",
+      "targets": [
+        {
+          "expr": "100 - (avg by (instance) (irate(windows_cpu_time_total{mode=\"idle\"}[5m])) * 100)"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 36,
+  "title": "Hadoop Admin \u2014 Windows Core",
+  "version": 1
+}
