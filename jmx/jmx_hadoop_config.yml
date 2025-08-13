@@ -1,0 +1,15 @@
+lowercaseOutputName: true
+lowercaseOutputLabelNames: true
+rules:
+  - pattern: 'Hadoop<name=(.*), service=(.*)><>(\w+)'
+    name: hadoop_$2_$3
+    type: GAUGE
+  - pattern: 'java.lang<type=Memory><>(\w+)'
+    name: jvm_memory_$1_bytes
+    type: GAUGE
+  - pattern: 'java.lang<type=GarbageCollector, name=(.*)><>CollectionTime'
+    name: jvm_gc_time_ms
+    type: COUNTER
+  - pattern: 'java.lang<type=Threading><>ThreadCount'
+    name: jvm_threads
+    type: GAUGE
