@@ -1,22 +1,2 @@
-route:
-  receiver: default
-  group_by: ['alertname']
-  routes:
-    - matchers: [ severity="critical" ]
-      receiver: ops
-
-receivers:
-  - name: default
-    email_configs:
-      - to: "you@example.com"
-        from: "alertmanager@example.com"
-        smarthost: "smtp.example.com:587"
-        auth_username: "alertmanager@example.com"
-        auth_identity: "alertmanager@example.com"
-        auth_password: "REPLACE_ME"
-        require_tls: true
-  - name: ops
-    slack_configs:
-      - api_url: "https://hooks.slack.com/services/T000/B000/XXXXXXXX"
-        channel: "#hadoop-alerts"
-        send_resolved: true
+route: { receiver: default }
+receivers: [{ name: default }]
